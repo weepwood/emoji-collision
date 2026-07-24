@@ -1,5 +1,7 @@
 # Emoji Collision Lab
 
+[![测试并部署 GitHub Pages](https://github.com/weepwood/emoji-collision/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/weepwood/emoji-collision/actions/workflows/deploy-pages.yml)
+
 一个可玩的像素风 Emoji 物理碰撞实验室。抓取、投掷和撞击 Emoji，在足够强烈的碰撞中发现隐藏的组合反应。
 
 ## 在线体验
