@@ -35,6 +35,9 @@ jobs:
         run: npm run build
       - name: 检查 GitHub Pages 配置
         uses: actions/configure-pages@v5
+      - name: 验证线上站点
+        if: github.event_name == 'pull_request'
+        run: curl --fail --silent --show-error --location --retry 4 --retry-delay 3 https://weepwood.github.io/emoji-collision/ | grep -F "Emoji Collision Lab"
       - name: 上传 Pages 构建产物
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
