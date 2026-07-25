@@ -12,14 +12,17 @@ permissions:
   pages: write
   id-token: write
 
+# PR 校验与 main 部署必须使用不同的并发组。
+# 否则新的 PR 工作流会取消正在进行的 Pages 正式发布。
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   quality:
     name: 测试与构建
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -40,7 +43,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
         with:
-          path: dist
+          path: ./dist
 
   deploy:
     name: 发布 GitHub Pages
@@ -50,6 +53,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: 部署到 GitHub Pages
         id: deployment
