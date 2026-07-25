@@ -12,8 +12,6 @@ permissions:
   pages: write
   id-token: write
 
-# PR 校验与 main 部署必须使用不同的并发组。
-# 否则新的 PR 工作流会取消正在进行的 Pages 正式发布。
 concurrency:
   group: pages-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
@@ -36,6 +34,21 @@ jobs:
         run: npm run test
       - name: 构建站点
         run: npm run build
+      - name: 验证已发布站点
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          for attempt in {1..18}; do
+            echo "第 ${attempt} 次检查线上站点"
+            page="$(curl --fail --silent --show-error --location --max-time 15 https://weepwood.github.io/emoji-collision/ || true)"
+            if grep -q '<title>Emoji Collision Lab</title>' <<< "$page"; then
+              echo "GitHub Pages 已正常发布"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::GitHub Pages 地址未返回预期页面"
+          exit 1
       - name: 配置 GitHub Pages
         if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
