@@ -36,6 +36,21 @@ jobs:
         run: npm run test
       - name: 构建站点
         run: npm run build
+      - name: 验证新版界面已上线
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          for attempt in {1..12}; do
+            html="$(curl -fsSL --max-time 20 https://weepwood.github.io/emoji-collision/ || true)"
+            if printf '%s' "$html" | grep -q '抓取、投掷并碰撞 Emoji'; then
+              echo "新版界面元信息已上线"
+              exit 0
+            fi
+            echo "等待 GitHub Pages 刷新：${attempt}/12"
+            sleep 10
+          done
+          echo "未检测到新版页面元信息"
+          exit 1
       - name: 配置 GitHub Pages
         if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
