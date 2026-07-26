@@ -1,0 +1,176 @@
+:root {
+  --dock-safe-zone: 80px;
+}
+
+/*
+ * The physics canvas ends before the control rail. Matter.js measures the
+ * canvas box, so Emoji bodies now land above the dock instead of behind it.
+ */
+.world-canvas {
+  bottom: auto;
+  height: calc(100% - var(--dock-safe-zone));
+}
+
+/* Move the contextual note out of the bottom interaction area. */
+.field-note {
+  top: 188px;
+  bottom: auto;
+}
+
+.tool-dock {
+  bottom: max(12px, env(safe-area-inset-bottom));
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(10, 12, 22, 0.74);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.34), inset 0 1px rgba(255, 255, 255, 0.035);
+}
+
+.dock-group {
+  gap: 3px;
+}
+
+.dock-divider {
+  margin: 5px 0;
+}
+
+.dock-button {
+  height: 46px;
+  border-radius: 8px;
+}
+
+.dock-button.primary,
+.dock-button.compact {
+  min-width: 108px;
+  padding: 0 24px 0 8px;
+  gap: 7px;
+}
+
+.dock-button.compact {
+  min-width: 100px;
+}
+
+.dock-icon {
+  width: 29px;
+  height: 29px;
+  border-radius: 7px;
+}
+
+.dock-copy {
+  gap: 2px;
+}
+
+.dock-copy b {
+  font-size: 9px;
+}
+
+.dock-copy small {
+  display: none;
+}
+
+.dock-button kbd {
+  top: 5px;
+  right: 5px;
+}
+
+.dock-button.square {
+  width: 49px;
+  gap: 2px;
+}
+
+/* A subtle separator shows where the usable physics field ends. */
+.app-shell::after {
+  content: '';
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  right: 0;
+  bottom: var(--dock-safe-zone);
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(201, 255, 90, 0.11) 18%, rgba(201, 255, 90, 0.11) 82%, transparent);
+}
+
+@media (max-width: 940px) {
+  :root {
+    --dock-safe-zone: 76px;
+  }
+
+  .tool-dock {
+    max-width: calc(100% - 20px);
+  }
+
+  .dock-button.primary,
+  .dock-button.compact {
+    min-width: 90px;
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --dock-safe-zone: 70px;
+  }
+
+  .tool-dock {
+    width: auto;
+    max-width: calc(100% - 16px);
+    bottom: max(8px, env(safe-area-inset-bottom));
+    gap: 3px;
+    padding: 4px;
+  }
+
+  .dock-group,
+  .dock-group:first-child {
+    flex: 0 0 auto;
+  }
+
+  .dock-group-actions {
+    justify-content: flex-start;
+  }
+
+  .dock-button,
+  .dock-button.primary,
+  .dock-button.compact,
+  .dock-button.square {
+    width: 46px;
+    min-width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    padding: 0;
+  }
+
+  .dock-button.primary,
+  .dock-button.compact {
+    justify-content: center;
+  }
+
+  .dock-button.primary .dock-icon,
+  .dock-button.compact .dock-icon {
+    width: auto;
+    height: auto;
+  }
+
+  .dock-copy,
+  .dock-button > span:not(.dock-icon),
+  .dock-button kbd {
+    display: none;
+  }
+
+  .dock-divider {
+    margin: 4px 0;
+  }
+}
+
+@media (max-height: 620px) and (min-width: 721px) {
+  :root {
+    --dock-safe-zone: 70px;
+  }
+
+  .tool-dock {
+    bottom: 8px;
+  }
+
+  .field-note {
+    display: none;
+  }
+}
