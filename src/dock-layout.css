@@ -7,6 +7,7 @@
  * canvas box, so Emoji bodies now land above the dock instead of behind it.
  */
 .world-canvas {
+  bottom: auto;
   height: calc(100% - var(--dock-safe-zone));
 }
 
