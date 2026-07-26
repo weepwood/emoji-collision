@@ -36,6 +36,23 @@ jobs:
         run: npm run test
       - name: 构建站点
         run: npm run build
+      - name: 验证底部安全区已上线
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in {1..12}; do
+            html="$(curl -fsSL https://weepwood.github.io/emoji-collision/)"
+            css_path="$(printf '%s' "$html" | grep -oE '/emoji-collision/assets/[^" ]+\.css' | head -n 1 || true)"
+            if [[ -n "$css_path" ]] && curl -fsSL "https://weepwood.github.io${css_path}" | grep -q -- '--dock-safe-zone'; then
+              echo "线上样式已包含底部安全区规则。"
+              exit 0
+            fi
+            echo "等待正式 Pages 更新（${attempt}/12）"
+            sleep 10
+          done
+          echo "未在正式 Pages 样式中检测到底部安全区规则。"
+          exit 1
       - name: 配置 GitHub Pages
         if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
