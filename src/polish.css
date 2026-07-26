@@ -1,0 +1,28 @@
+:where(button, a, input):focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
+}
+
+@supports (height: 100dvh) {
+  html, body, #app, .app-shell { height: 100dvh; }
+}
+
+@media (hover: none) {
+  .icon-button:hover,
+  .header-action:hover,
+  .dock-button:hover,
+  .emoji-grid button:hover,
+  .intro-cta:hover {
+    transform: none;
+  }
+}
+
+@media (max-height: 650px) and (min-width: 721px) {
+  .telemetry-panel { top: 76px; }
+  .field-note { display: none; }
+  .intro-layer { padding-top: 82px; padding-bottom: 88px; }
+  .intro-card { padding-top: 28px; padding-bottom: 28px; }
+  .intro-card h1 { font-size: clamp(42px, 6.4vw, 68px); }
+  .intro-controls { margin-top: 18px; }
+  .tool-dock { bottom: 12px; }
+}
